@@ -28,10 +28,6 @@
 					{
 						"key": "Accept",
 						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json-patch+json"
 					}
 				],
 				"body": {
@@ -39,13 +35,11 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{host}}/api/answers/user",
+					"raw": "{{base}}/user",
 					"host": [
-						"{{host}}"
+						"{{base}}"
 					],
 					"path": [
-						"api",
-						"answers",
 						"user"
 					]
 				}
@@ -101,10 +95,6 @@
 					{
 						"key": "Accept",
 						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json-patch+json"
 					}
 				],
 				"body": {
@@ -112,14 +102,171 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{host}}/api/answers/user",
+					"raw": "{{base}}/user",
 					"host": [
-						"{{host}}"
+						"{{base}}"
 					],
 					"path": [
-						"api",
-						"answers",
 						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sort options",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a6d2a902-5ed9-4574-83af-dda37fe902ce",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.be.ok;",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "OPTIONS",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base}}/sort",
+					"host": [
+						"{{base}}"
+					],
+					"path": [
+						"sort"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get sorted products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "27dbcc88-78aa-4643-a291-8e13b2de13a1",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is ok\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"response schema to be valid json\", function () {",
+							"    var schema = { ",
+							"        \"type\": \"array\",",
+							"        \"items\": {",
+							"            \"type\": \"object\",",
+							"            \"properties\": {",
+							"                \"name\": {",
+							"                    \"type\": \"string\"",
+							"                },",
+							"                \"price\": {",
+							"                    \"type\": \"number\"",
+							"                },",
+							"                \"quantity\": {",
+							"                    \"type\": \"number\"",
+							"                },",
+							"            },",
+							"        },",
+							"    };",
+							"    ",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"    ",
+							"    var isValid = tv4.validate(pm.response.json(), schema);",
+							"    if (isValid !== true) {",
+							"        console.log(tv4.error);",
+							"    }",
+							"    pm.expect(isValid).to.be.true;",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base}}/sort?sortOption=Recommended",
+					"host": [
+						"{{base}}"
+					],
+					"path": [
+						"sort"
+					],
+					"query": [
+						{
+							"key": "sortOption",
+							"value": "Recommended"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get sorted products bad request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "73da711e-ff27-4155-b131-846bc70757d3",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"    pm.response.to.be.badRequest;",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base}}/sort",
+					"host": [
+						"{{base}}"
+					],
+					"path": [
+						"sort"
 					]
 				}
 			},
@@ -150,9 +297,9 @@
 	],
 	"variable": [
 		{
-			"id": "e461927a-3df4-4aaa-8fb7-9481e67bad7e",
-			"key": "host",
-			"value": "https://localhost:5001",
+			"id": "80e76fde-5b0f-493d-80b1-dda85d226dbc",
+			"key": "base",
+			"value": "https://localhost:5001/api/answers",
 			"type": "string"
 		}
 	]

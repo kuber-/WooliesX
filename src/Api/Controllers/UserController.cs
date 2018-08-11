@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+using Api.Options;
+using Microsoft.Extensions.Options;
 
 namespace Api.Controllers
 {
@@ -7,12 +8,11 @@ namespace Api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        static readonly string TokenKey = "Api:Token";
-        readonly IConfiguration configuration;
+        private readonly string token;
 
-        public UserController(IConfiguration configuration)
+        public UserController(IOptions<ApiOptions> apiOptions)
         {
-            this.configuration = configuration;
+            token = apiOptions.Value.Token;
         }
 
         [HttpGet]
@@ -20,8 +20,8 @@ namespace Api.Controllers
         {
             return Ok(new
             {
-                Name = "Kuber",
-                Token = configuration[TokenKey],
+                Name = "User",
+                Token = token,
             });
         }
 
