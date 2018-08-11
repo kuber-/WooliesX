@@ -21,4 +21,10 @@
   <ItemGroup>
     <Compile Remove="Helpers\CacheKeys.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="app.yaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app.yaml" />
+  </ItemGroup>
 </Project>

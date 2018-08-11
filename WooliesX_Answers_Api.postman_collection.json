@@ -271,6 +271,98 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "TrolleyCalculator calcuate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2972de06-ab98-4618-bc77-7166ec0558d3",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.be.ok;",
+							"});",
+							"",
+							"pm.test(\"result is 650\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"    pm.response.to.have.body(\"650.0\");",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"products\": [\n    {\n      \"name\": \"A\",\n      \"price\": 100\n    },\n    {\n      \"name\": \"B\",\n      \"price\": 50\n    },\n    {\n      \"name\": \"C\",\n      \"price\": 50\n    }\n\n  ],\n  \"specials\": [\n    {\n      \"quantities\": [\n       {\n        \"name\": \"A\",\n        \"quantity\": 2\n      },\n     {\n        \"name\": \"B\",\n        \"quantity\": 3\n      },\n      {\n        \"name\": \"C\",\n        \"quantity\": 1\n      }\n      ],\n      \"total\": 350\n    },\n{\n      \"quantities\": [\n       {\n        \"name\": \"A\",\n        \"quantity\": 4\n      },\n     {\n        \"name\": \"B\",\n        \"quantity\": 4\n      },\n      {\n        \"name\": \"C\",\n        \"quantity\": 1\n      }\n      ],\n      \"total\": 500\n    }\n  ],\n  \"quantities\": [\n    {\n      \"name\": \"A\",\n      \"quantity\": 5\n    },\n   {\n      \"name\": \"B\",\n      \"quantity\": 4\n    },\n   {\n      \"name\": \"C\",\n      \"quantity\": 2\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "{{base}}/trolleyCalculator",
+					"host": [
+						"{{base}}"
+					],
+					"path": [
+						"trolleyCalculator"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TrolleyCalculator options",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a6d2a902-5ed9-4574-83af-dda37fe902ce",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.be.ok;",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "OPTIONS",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base}}/trolleyCalculator",
+					"host": [
+						"{{base}}"
+					],
+					"path": [
+						"trolleyCalculator"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -297,9 +389,15 @@
 	],
 	"variable": [
 		{
-			"id": "80e76fde-5b0f-493d-80b1-dda85d226dbc",
+			"id": "193951a3-3694-452e-be60-d24a85071c5d",
 			"key": "base",
-			"value": "https://localhost:5001/api/answers",
+			"value": "https://woolies-x.appspot.com/api/answers",
+			"type": "string"
+		},
+		{
+			"id": "8a9f1c8e-17d7-4cfa-9fd6-2b1f64d4fcaf",
+			"key": "prod_base",
+			"value": "https://woolies-x.appspot.com",
 			"type": "string"
 		}
 	]

@@ -20,7 +20,7 @@ namespace Api.Controllers
         {
             return Ok(new
             {
-                Name = "User",
+                Name = "Kuber Kumar",
                 Token = token,
             });
         }

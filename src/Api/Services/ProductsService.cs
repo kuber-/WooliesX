@@ -13,17 +13,85 @@ namespace Api.Services
 {
     public interface IProductsService {
         Task<IEnumerable<ProductDto>> GetSortedProductsAsync(ProductSortOptions sortOption);
+
+        double GetTotal(TrolleyForCalculateDto dto);
     }
 
     public class ProductsService : IProductsService
     {
         private readonly IWooliesXApiClient client;
 
+        public ProductsService()
+        {
+        }
+
         public ProductsService(
             IOptions<ApiOptions> options,
             IWooliesXApiClient client)
         {
             this.client = client;
+        }
+
+        public double GetTotal(TrolleyForCalculateDto dto)
+        {
+            var productPrices = dto.Products.ToDictionary(x => x.Name, x => x.Price);
+            var shoppingCart = dto.Quantities.ToDictionary(x => x.Name, x => x.Quantity);
+            var total = GetBasePrice(productPrices, shoppingCart);
+
+            foreach(var special in GetValidSpecials(dto.Specials, shoppingCart)) {
+                total = Math.Min(total, GetSpecialPrice(special, productPrices, shoppingCart));
+            }
+
+            return total;
+        }
+
+        private IEnumerable<Special> GetValidSpecials(
+            IEnumerable<Special> specials,
+            Dictionary<string, int> shoppingCart)
+        {
+            return specials.Where(x => x.Quantities.All(quantity => 
+                 shoppingCart.ContainsKey(quantity.Name) &&
+                 shoppingCart[quantity.Name] >= quantity.Quantity));
+        }
+
+        private double GetSpecialPrice(
+            Special special,
+            Dictionary<string, double> productPrices,
+            Dictionary<string, int> origShoppingCart)
+        {
+            var shoppingCart = new Dictionary<string, int>(origShoppingCart.Count);
+            var specialDict = special.Quantities.ToDictionary(x => x.Name, x => x.Quantity);
+
+            foreach (var (name, quantity) in origShoppingCart)
+            {
+                shoppingCart.Add(name, quantity);
+            }
+
+            var count = 0;
+            while(special.Quantities.TrueForAll(x => 
+                shoppingCart.ContainsKey(x.Name) && shoppingCart[x.Name] >= x.Quantity))
+            {
+                foreach(var (name, quantity) in specialDict) {
+                    shoppingCart[name] = shoppingCart[name] - quantity;
+                }
+
+                count += 1;
+            }
+
+            var total = count * special.Total;
+
+            foreach(var (name, quantity) in shoppingCart) {
+                total += productPrices[name] * quantity;
+            }
+
+            return total;
+        }
+
+        private double GetBasePrice(
+            Dictionary<string, double> productPrices,
+            Dictionary<string, int> shoppingCart)
+        {
+            return shoppingCart.Sum(x => productPrices[x.Key] * x.Value);
         }
 
         public async Task<IEnumerable<ProductDto>> GetSortedProductsAsync(ProductSortOptions sortOption)

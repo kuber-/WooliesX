@@ -11,12 +11,10 @@ namespace Api.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly string token;
         private readonly IProductsService productsService;
 
-        public ProductsController(IOptions<ApiOptions> apiOptions, IProductsService productsService)
+        public ProductsController(IProductsService productsService)
         {
-            token = apiOptions.Value.Token;
             this.productsService = productsService;
         }
 
