@@ -1,0 +1,159 @@
+{
+	"info": {
+		"_postman_id": "4eee2114-48fe-4eda-ac7c-05c7efd1ac47",
+		"name": "WooliesX Answers Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User options",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a6d2a902-5ed9-4574-83af-dda37fe902ce",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.be.ok;",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "OPTIONS",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json-patch+json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{host}}/api/answers/user",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"answers",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9fa837f3-c5e1-4544-9e00-7ccebdcc132a",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is ok\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"response schema to be valid json\", function () {",
+							"    var schema = { ",
+							"        \"type\": \"object\",",
+							"        \"required\": [\"name\", \"token\"],",
+							"        \"properties\": {",
+							"            \"name\": {",
+							"                \"type\": \"string\"",
+							"            },",
+							"            \"token\": {",
+							"                \"type\": \"string\",",
+							"                \"format\": \"guid\"",
+							"            },",
+							"        },",
+							"    };",
+							"    ",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"    ",
+							"    var isValid = tv4.validate(pm.response.json(), schema);",
+							"    if (isValid !== true) {",
+							"        console.log(tv4.error);",
+							"    }",
+							"    pm.expect(isValid).to.be.true;",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json-patch+json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{host}}/api/answers/user",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"answers",
+						"user"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "9b559ed6-2d69-4321-b610-df6979db7a27",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "394d9caf-3453-4d03-bb05-df8e13ce38d9",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "e461927a-3df4-4aaa-8fb7-9481e67bad7e",
+			"key": "host",
+			"value": "https://localhost:5001",
+			"type": "string"
+		}
+	]
+}
